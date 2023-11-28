@@ -3,7 +3,7 @@ const { cadastrarUsuario, logar } = require("./Controladores/usuario")
 const validarLogin = require("./Intermediarios/login")
 const multer = require("./Intermediarios/multer")
 const { cadastrarProduto, listarProdutos, detalharProduto, excluirProduto } = require("./Controladores/produtos")
-const { cadastrarPedido } = require("./Controladores/pedidos")
+const { cadastrarPedido, listarPedidos } = require("./Controladores/pedidos")
 
 const rotas = express()
 
@@ -18,6 +18,7 @@ rotas.get("/produto/:id_produto", detalharProduto)
 rotas.delete("/produto/:id_produto", excluirProduto)
 
 rotas.post("/pedido", cadastrarPedido)
+rotas.get('/pedido', listarPedidos)
 
 
 module.exports = {rotas}
