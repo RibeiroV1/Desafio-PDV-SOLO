@@ -14,6 +14,7 @@ const validarLogin = async (req, res, next)=>{
         req.usuario = usuario
         next()
     } catch (error) {
+        reportarErro(error)
         return res.status(401).json({mensagem: "Erro interno de servidor."})
     }
 }

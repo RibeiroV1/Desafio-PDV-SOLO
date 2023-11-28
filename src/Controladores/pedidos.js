@@ -1,4 +1,5 @@
 const knex = require("../BancoDados/conexao")
+const { reportarErro } = require("../utils")
 
 const cadastrarPedido = async (req, res)=>{
     let {data, pedido_produtos}= req.body
@@ -8,7 +9,7 @@ const cadastrarPedido = async (req, res)=>{
     try {
         for(produto of pedido_produtos){
             const existe = await knex("produtos").select("*").where({id : produto.produto_id})
-            if(existe.length == 0)return res.status(404).json({mensagem: `Produto de id ${produto.id} não encontrado.`})
+            if(existe.length == 0)return res.status(404).json({mensagem: `Produto de id ${produto.produto_id} não encontrado.`})
             soma+=(Number(existe[0].valor) * Number(produto.quantidade_produto))
         }
         const pedido = await knex('pedidos').insert({data, valor_total: soma}).returning('*')
@@ -21,7 +22,7 @@ const cadastrarPedido = async (req, res)=>{
             })
         }
     } catch (error) {
-        //TODO: colocar erro no log
+        reportarErro(error)
         return res.status(500).json({mensagem: "Erro interno de servidor."})
     }
     return res.status(201).json({mensagem : "Pedido realizado."})
@@ -66,8 +67,7 @@ const listarPedidos = async (req, res)=>{
         }
         return res.json(listaPedidos)
     } catch (error) {
-        console.log(error)
-        //TODO: Colocar erro no log
+        reportarErro(error)
         return res.status(500).json({mensagem: "Erro interno de servidor."})
     }
 }

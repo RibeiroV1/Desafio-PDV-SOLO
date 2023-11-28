@@ -21,7 +21,7 @@ const cadastrarProduto = async (req, res)=>{
         const produtoSalvo = await knex("produtos").insert(produto, '*')
         return res.status(201).json(produtoSalvo)
     } catch (error) {
-        //TODO: Criar log de erro
+        reportarErro(error)
         return res.status(500).json({mensagem: "Erro interno de servidor!"})
     }
 
@@ -38,7 +38,7 @@ const detalharProduto = async (req, res)=>{
         if(produto.length == 0)return res.status(404).json({mensagem: "Produto não encontrado!"})
         return res.json(produto)
     } catch (error) {
-        //TODO: Criar log erro
+        reportarErro(error)
         return res.status(500).json({mensagem: "Erro interno de servidor"})
     }
 }
@@ -50,6 +50,7 @@ const excluirProduto = async (req, res)=>{
         excluirArquivo(produto[0].url)
         return res.status(200).json(produto[0])
     } catch (error) {
+        reportarErro(error)
         return res.status(500).json({mensagem: "Erro interno de servidor"})
     }
 }

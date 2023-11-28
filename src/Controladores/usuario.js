@@ -23,7 +23,6 @@ const  cadastrarUsuario = async (req, res) =>{
 
         const senhaCriptografada = await bcrypt.hash(senha, 10)
         await knex.insert({nome, email, senha: senhaCriptografada}).into("usuarios")
-        //Enviar e-mail.
         const info = await transport.sendMail({
             from: "vitor3020@hotmail.com",
             to: email,
@@ -35,8 +34,9 @@ const  cadastrarUsuario = async (req, res) =>{
         return res.status(200).json({nome, email})
 
     } catch (error) {
-        //TODO: salvar erros do servidor em console.log
-        console.log(error)
+        //Enviar e-mail.
+
+        reportarErro(error)
         return res.status(500).json({mensagem: "Erro interno de servidor!"})
     }
 }
@@ -53,8 +53,7 @@ const logar = async (req, res)=>{
         return res.json({usuario: user, token})
 
     } catch (error) {
-        //TODO: Salvar o erro em um log
-        console.log(error)
+        reportarErro(error)
         return res.status(500).json({mensagem: "Erro interno de servidor"})
     }
 }
