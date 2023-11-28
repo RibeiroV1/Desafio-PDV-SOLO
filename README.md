@@ -1,12 +1,13 @@
-# desafio-backend-05-pdv
-
+# desafio-backend-individual-05-pdv
 ![](https://i.imgur.com/xG74tOh.png)
 
-# Desafio Módulo 5 - Backend
+# Desafio Individual Módulo 5 - Backend
 
-Seja bem vindo(a) ao desafio do módulo 5.
+Seja bem-vindo(a) ao desafio individual do Módulo 5.
 
-Sua tarefa como desenvolvedor(a) será criar uma API para um PDV (Frente de Caixa). Esse será um projeto piloto, ou seja, no futuro outras funcionalidades serão implementadas.
+Sua tarefa como desenvolvedor(a) será criar uma API para um PDV (Frente de Caixa) para pequenos comércios.
+
+O PDV deverá permitir aos funcionários do comércio, dentre outras coisas (listadas mais abaixo), cadastrarem produtos e pedidos.
 
 **Importante 1: Sempre que a validação de uma requisição falhar, responda com código de erro e mensagem adequada à situação, ok?**
 
@@ -29,13 +30,13 @@ Sua tarefa como desenvolvedor(a) será criar uma API para um PDV (Frente de Caix
 
 Você precisa criar um Banco de Dados PostgreSQL chamado `pdv`.
 
-**IMPORTANTE: Deverá ser criado no projeto o arquivo SQL que deverá ser o script contendo os comandos de criação das tabelas respeitando os nomes das tabelas e colunas respectivamente, além de, conter os comandos para a inserção das categorias que devem ser previamente cadastradas (estão citadas na 1ª Sprint no item Listar Categorias).**
+**IMPORTANTE: Deverá ser criado no projeto um arquivo .sql contendo os comandos de criação das tabelas e colunas.**
 
 ## **Requisitos obrigatórios**
 
-- A API a ser criada deverá acessar o banco de dados a ser criado `pdv` para persistir e manipular os dados de categorias, clientes, pedidos, produtos e usuários utilizados pela aplicação.
-- O campo id das tabelas no banco de dados deve ser auto incremento, chave primária e não deve permitir edição uma vez criado.
-- Qualquer valor monetário deverá ser representado em centavos (Ex.: R$ 10,00 reais = 1000)
+-   A API a ser criada deverá acessar o banco de dados a ser criado, `pdv`, para persistir e manipular os dados.
+-   O campo `id` das tabelas no banco de dados deve ser auto incremento, chave primária e não deve permitir edição uma vez criado.
+-   Qualquer valor monetário deverá ser representado em centavos (Ex.: R$ 10,00 reais = 1000)
 
 ## **Status Codes**
 
@@ -52,72 +53,57 @@ Abaixo, listamos os possíveis **_status codes_** esperados como resposta da API
 // 500 (Internal Server Error) = erro inesperado do servidor
 ```
 
-<details>
-<summary>1ª Sprint</summary>
-<br>
+- ## Efetuar deploy da aplicação
 
-<details>
-<summary><b>Banco de Dados</b></summary>
-<br>
+Fazer deploy do projeto e disponibilizar a URL.
 
-Crie as seguintes tabelas e colunas abaixo:
+- ## Banco de Dados
+Crie as seguintes tabelas e colunas abaixo: 
 
 **ATENÇÃO! Os nomes das tabelas e das colunas a serem criados devem seguir exatamente os nomes listados abaixo.**
 
-- usuarios
-  - id
-  - nome
-  - email (campo único)
-  - senha
-- categorias
-  - id
-  - descricao
+-   usuarios
+    -   id (chave primária)
+    -   nome
+    -   email (campo único)
+    -   senha
+    
+-   produtos
+    -   id (chave primária)
+    -   descricao
+    -   valor
+    - 	produto_imagem
+    
+-   pedidos
+    -   id (chave primária)
+    -   data (valor padrão: momento da inserção do dado)
+    -   valor_total
+    
+-   pedido_produtos
+    -   id (chave primária)
+    -   pedido_id
+    -   produto_id
+    -   quantidade_produto
 
-</details>
-
-<details>
-<summary><b>Listar categorias</b></summary>
-
-#### `GET` `/categoria`
-
-Essa é a rota que será chamada quando o usuário quiser listar todas as categorias cadastradas.
-
-As categorias a seguir precisam ser previamente cadastradas para que sejam listadas no endpoint de listagem das categorias.
-
-## **Categorias**
-
-- Informática
-- Celulares
-- Beleza e Perfumaria
-- Mercado
-- Livros e Papelaria
-- Brinquedos
-- Moda
-- Bebê
-- Games
-
-</details>
-
-<details>
-<summary><b>Cadastrar usuário</b></summary>
+- ## Cadastrar usuário
 
 #### `POST` `/usuario`
 
 Essa é a rota que será utilizada para cadastrar um novo usuário no sistema.
 
-Critérios de aceite:
+Após o cadastro, o usuário deve receber um e-mail de boas-vindas.
 
-    - Validar os campos obrigatórios:
+Critérios de aceite:
+    
+    - Validar os campos obrigatórios: 
         - nome
         - email
         - senha
     - A senha deve ser criptografada utilizando algum algoritmo de criptografia confiável.
     - O campo e-mail no banco de dados deve ser único para cada registro, não permitindo dois usuários possuírem o mesmo e-mail.
+    - Deverá ser enviado ao usuário um e-mail de boas-vindas.
 
-</details>
-
-<details>
-<summary><b>Efetuar login do usuário</b></summary>
+- ## Efetuar login do usuário
 
 #### `POST` `/login`
 
@@ -128,58 +114,162 @@ Critérios de aceite:
     - Validar se o e-mail e a senha estão corretos para o usuário em questão.
     - Gerar um token de autenticação para o usuário.
 
-</details>
-
 ---
 
 ## **ATENÇÃO**: Todas as funcionalidades (endpoints) a seguir, a partir desse ponto, deverão exigir o token de autenticação do usuário logado, recebendo no header com o formato Bearer Token. Portanto, em cada funcionalidade será necessário validar o token informado.
 
 ---
 
-<details>
-<summary><b>Detalhar perfil do usuário logado</b></summary>
+- ## Cadastrar Produto
 
-#### `GET` `/usuario`
+#### `POST` `/produto`
 
-Essa é a rota que permite o usuário logado a visualizar os dados do seu próprio perfil, de acordo com a validação do token de autenticação.
+Essa é a rota que permite o usuário logado cadastrar um novo produto no sistema.
 
-</details>
+Deverá ser permitido vincular uma imagem a um produto pela coluna `produto_imagem`.
 
-<details>
-<summary><b>Editar perfil do usuário logado</b></summary>
+Critérios de aceite:
 
-#### `PUT` `/usuario`
+    -   Validar os campos obrigatórios:
+        -   descricao
+        -   valor
+    - O campo produto_imagem deve ser opcional. Caso enviado no corpo da requisição, deveremos processar a imagem vinculada a essa propriedade e armazenar a imagem em um servidor de armazenamento (Supabase, Blackblaze, etc...).
+    - Armazenar na coluna produto_imagem a URL que possibilita visualizar a imagem que foi efetuada upload para o servidor de armazenamento.
 
-Essa é a rota que permite o usuário logado atualizar informações de seu próprio cadastro, de acordo com a validação do token de autenticação.
+**Lembre-se:** A URL retornada deve ser válida, ou seja, ao ser clicada deve possibilitar visualizar a imagem que foi feito *upload*.
+
+**ATENÇÃO:** Abaixo encontra-se um exemplo de resposta retornada a uma requisição para esse endpoint com uma URL fictícia, ilustrando o que o serviço de armazenamento da Blackblaze retornaria após *upload* efetuado com sucesso. Portanto, essa seria, no caso, a URL que armazaremos na coluna `produto_imagem` no banco de dados.
+
+```javascript
+// Resposta cadastro/atualização de produto (body)
+{
+    "id": 7,		
+    "descricao": "Motorola moto g9 plus",
+    "valor": 15000,
+    "produto_imagem": "https://s3.us-east-005.backblazeb2.com/desafio-final.jpg"
+}
+```
+
+- ## Listar Produtos
+
+#### `GET` `/produto`
+
+Essa é a rota que será chamada quando o usuário logado quiser listar todos os produtos cadastrados.
+
+Critérios de aceite:
+
+    - Retornar todos os produtos cadastrados.
+
+- ## Detalhar Produto
+
+#### `GET` `/produto/:id`
+
+Essa é a rota que permite ao usuário logado obter um de seus produtos cadastrados.  
+
+Critérios de aceite:
+
+    -   Validar se existe produto para o id enviado como parâmetro na rota.
+
+- ## Excluir Produto por ID
+
+#### `DELETE` `/produto/:id`
+
+Essa é a rota que será chamada quando o usuário logado quiser excluir um de seus produtos cadastrados.  
+
+Critérios de aceite:
+
+	- Validar se existe produto para o id enviado como parâmetro na rota.
+	- Na exclusão do produto, a imagem vinculada a ele deverá ser excluída do servidor de armazenamento.
+
+- ## Cadastrar Pedido
+
+#### `POST` `/pedido`
+
+Essa é a rota que será utilizada para cadastrar um novo pedido no sistema.
+
+**Lembre-se:** Cada pedido deverá conter ao menos um produto vinculado.
+
+**Atenção:** As propriedades `produto_id` e `quantidade_produto` devem ser informadas dentro de um array, e para cada produto deverá ser criado um objeto neste array, como ilustrado no objeto de requisição abaixo.
+Só deverá ser cadastrado o pedido caso todos produtos vinculados ao pedido realmente existirem no banco de dados.
+
+```javascript
+// Corpo da requisição para cadastro de pedido (body)
+{
+
+    "data": "22-12-2021",
+    "pedido_produtos": [
+        {
+            "produto_id": 1,
+            "quantidade_produto": 10
+        },
+        {
+            "produto_id": 2,
+            "quantidade_produto": 20
+        }
+    ]
+}
+```
 
 Critérios de aceite:
 
     - Validar os campos obrigatórios:
-        - nome
-        - email
-        - senha
-    - A senha deve ser criptografada utilizando algum algoritmo de criptografia confiável.
-    - O campo e-mail no banco de dados deve ser único para cada registro, não permitindo dois usuários possuírem o mesmo e-mail.
+	    -   produto_id
+	    -   quantidade_produto
+    - Validar se existe produto para cada produto_id informado dentro do array enviado no corpo (body) da requisição. O pedido deverá ser cadastrado, apenas, se todos os produtos estiverem validados.
+    - Caso não seja passada a data, o pedido deve ser cadastrado com a data em que a requisição de cadastro foi feita.  
 
-</details>
+- ## Listar Pedidos
 
-<details>
-<summary><b>Efetuar deploy da aplicação</b></summary>
-<br>
+#### `GET` `/pedido`
 
-Fazer deploy do projeto e disponibilizar a URL.
+Essa é a rota que será chamada quando o usuário logado quiser listar todos os pedidos cadastrados.
 
-</details>
+Deveremos incluir um parâmetro chamado **a_partir** do tipo *query* para que seja possível consultar pedidos feitos daquela data em diante.
 
-</details>
+```javascript
+// Resposta para listagem de pedido (body)
+[
+    {
+        "pedido": {
+            "id": 1,
+            "valor_total": 230010,
+            "data": '22-12-1993',
+        },
+        "pedido_produtos": [
+            {
+                "id": 1,
+                "quantidade_produto": 1,
+                "valor_produto": 10,
+                "pedido_id": 1,
+                "produto_id": 1
+            },
+            {
+                "id": 2,
+                "quantidade_produto": 2,
+                "valor_produto": 230000,
+                "pedido_id": 1,
+                "produto_id": 2
+            }
+        ]
+    }
+]
+```
+
+Critérios de aceite:
+
+    - Lista os pedidos cadastrados da data a_partir em diante, caso esse parâmetro seja passado.
+    - Listar todos os pedidos cadastrados, caso o parâmetro a_partir não seja passado.
+
+---
 
 ## Aulas úteis:
 
--   [Revisão](https://aulas.cubos.academy/turma/0a3e0b97-7dc1-4b7b-b608-8c6d4e2465d3/aulas/312ab7ba-19f2-44b2-a07d-08d4180669cf)
--   [Git e fluxo de trabalho em equipe](https://aulas.cubos.academy/turma/0a3e0b97-7dc1-4b7b-b608-8c6d4e2465d3/aulas/843299f6-f924-4c20-8e8d-1b04ccde9153)
--   [Deploy](https://aulas.cubos.academy/turma/0a3e0b97-7dc1-4b7b-b608-8c6d4e2465d3/aulas/a6d26804-b9ba-47b6-ad17-198377a238b1)
--   [Envio de e-mails](https://aulas.cubos.academy/turma/0a3e0b97-7dc1-4b7b-b608-8c6d4e2465d3/aulas/83ec0175-0538-41e5-9af4-82705c3183da)
--   [Validações e boas práticas](https://aulas.cubos.academy/turma/0a3e0b97-7dc1-4b7b-b608-8c6d4e2465d3/aulas/e0a75639-71fc-4f7a-9857-f4e2e5870c86)
--   [Upload de arquivos](https://aulas.cubos.academy/turma/0a3e0b97-7dc1-4b7b-b608-8c6d4e2465d3/aulas/5e3ab79f-8b3f-4c0a-a116-19416888689c)
+-   [Revisão](https://aulas.cubos.academy/turma/cafbd2d1-e907-49e5-b7fa-48df482214d8/aulas/4457a63a-c440-431c-9bb2-97b022630de2)
+-   [Git e fluxo de trabalho em equipe](https://aulas.cubos.academy/turma/cafbd2d1-e907-49e5-b7fa-48df482214d8/aulas/5a566329-5dbc-4a36-8beb-71ce9d66d870)
+-   [Deploy](https://aulas.cubos.academy/turma/cafbd2d1-e907-49e5-b7fa-48df482214d8/aulas/2fde8bfd-4a7f-4727-a6e0-37450f1a0b74)
+-   [Envio de e-mails](https://aulas.cubos.academy/turma/cafbd2d1-e907-49e5-b7fa-48df482214d8/aulas/2e3de385-27b7-4bec-9f16-203a941d4016)
+-   [Validações e boas práticas](https://aulas.cubos.academy/turma/cafbd2d1-e907-49e5-b7fa-48df482214d8/aulas/2f8c5cfd-421e-433a-b886-c2fc3481d67b)
+-   [Upload de arquivos](https://aulas.cubos.academy/turma/cafbd2d1-e907-49e5-b7fa-48df482214d8/aulas/c3c33767-a254-41ee-ad79-6f48414dcf62)
 
 ###### tags: `back-end` `módulo 5` `nodeJS` `PostgreSQL` `API REST` `desafio`
+
